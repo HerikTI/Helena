@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chá de Bebê da Helena</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!-- Elementos decorativos -->
+    <div class="clouds">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+    </div>
+    
+    <div class="bears">
+        <div class="bear bear-left"><img src="img/urso.png" alt="Urso decorativo"></div>
+        <div class="bear bear-right"><img src="img/urso.png" alt="Urso decorativo"></div>
+    </div>
+
+    <div class="container">
+        <header class="glass-card animate__animated animate__fadeIn">
+            <h1 class="section-title">Chá de Bebê da Helena</h1>
+            <p class="subtitle">✨ Venha celebrar conosco este momento mágico! ✨</p>
+            
+            <div id="countdown">
+                <div class="countdown-item">
+                    <span id="days">00</span>
+                    <span>Dias</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="hours">00</span>
+                    <span>Horas</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="minutes">00</span>
+                    <span>Minutos</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="seconds">00</span>
+                    <span>Segundos</span>
+                </div>
+            </div>
+
+            <div class="info-content">
+                <div class="info-item">
+                    <div class="info-icon">
+                        <span class="material-icons">calendar_today</span>
+                        <span class="icon-label">Data</span>
+                    </div>
+                    <p class="info-text">15 de Março de 2025</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">
+                        <span class="material-icons">schedule</span>
+                        <span class="icon-label">Horário</span>
+                    </div>
+                    <p class="info-text">15:00</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">
+                        <span class="material-icons">location_on</span>
+                        <span class="icon-label">Local</span>
+                    </div>
+                    <p class="info-text">[Endereço do evento]</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Etapa 1: Quiz do Ultrassom -->
+        <section id="step1" class="step active glass-card animate__animated animate__fadeIn">
+            <h2 class="section-title">Para confirmar sua presença, Encontre a Helena</h2>
+            <p class="subtitle">Entre as três imagens de ultrassom abaixo, apenas uma é da Helena. 
+            Você consegue identificar qual é? 🤔</p>
+            
+            <div class="ultrasound-options">
+                <div class="ultrasound-card" data-correct="false">
+                    <img src="img/ultrassom1.png" alt="Ultrassom 1">
+                </div>
+                <div class="ultrasound-card" data-correct="true">
+                    <img src="img/helena.jpg" alt="Ultrassom da Helena">
+                </div>
+                <div class="ultrasound-card" data-correct="false">
+                    <img src="img/ultrassom2.png" alt="Ultrassom 3">
+                </div>
+            </div>
+            <div id="quiz-result" class="quiz-result" style="display: none;"></div>
+        </section>
+
+        <!-- Etapa 2: Confirmação de Presença -->
+        <section id="step2" class="step glass-card animate__animated animate__fadeIn">
+            <h2 class="section-title">Confirmação de Presença</h2>
+            <p class="subtitle">Agora que você já encontrou a Helena, confirme sua presença! 🎉</p>
+            
+            <form id="rsvpForm" class="form-group">
+                <input type="text" id="name" required placeholder="✨ Seu nome">
+                <input type="tel" id="phone" required placeholder="📱 Seu telefone">
+                <select id="guests" required>
+                    <option value="">👥 Número de pessoas</option>
+                    <option value="1">1 pessoa</option>
+                    <option value="2">2 pessoas</option>
+                    <option value="3">3 pessoas</option>
+                </select>
+                <button type="submit" class="button">Confirmar Presença</button>
+            </form>
+        </section>
+
+        <!-- Etapa 3: Palpites -->
+        <section id="step3" class="step glass-card animate__animated animate__fadeIn">
+            <h2 class="section-title">Deixe seu Palpite</h2>
+            <p class="subtitle">Que tal participar de uma brincadeira? 🎮</p>
+            
+            <form id="birthGuessForm" class="form-group">
+                <h3 class="section-title">Quando você acha que a Helena vai nascer? 👶</h3>
+                <div class="input-group">
+                    <input type="date" id="guessDate" required>
+                    <input type="time" id="guessTime" required>
+                    <input type="number" id="guessWeight" step="0.01" required placeholder="✨ Peso em kg (ex: 3.2)">
+                </div>
+                <button type="submit" class="button">Enviar Palpite</button>
+            </form>
+
+            <div id="guessList" class="guesses-container"></div>
+
+            <h2 class="section-title">Mensagem para Helena</h2>
+            <p class="subtitle">Deixe uma mensagem carinhosa para a Helena! 💝</p>
+            
+            <form id="messageForm" class="form-group">
+                <textarea id="messageContent" required placeholder="✨ Sua mensagem..."></textarea>
+                <button type="submit" class="button">Enviar Mensagem</button>
+            </form>
+            <div id="messageWall" class="messages-container"></div>
+        </section>
+
+        <!-- Seção de Presentes -->
+        <section class="glass-card animate__animated animate__fadeIn">
+            <h2 class="section-title">Presentinhos</h2>
+            <p class="subtitle">Para tornar este momento ainda mais especial! 🎁</p>
+            
+            <div class="gift-items">
+                <div class="gift-item">
+                    <span class="gift-icon">👶</span>
+                    <p>Uma fralda tamanho M</p>
+                </div>
+                <div class="gift-item">
+                    <span class="gift-icon">🎁</span>
+                    <p>Um mimo</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
