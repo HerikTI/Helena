@@ -218,17 +218,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const date = document.getElementById('guessDate').value;
             const time = document.getElementById('guessTime').value;
             const weight = parseFloat(document.getElementById('guessWeight').value);
+            const nome = document.getElementById('name').value;
 
             // Validações
-            if (!date || !time || !weight) {
+            if (!date || !time || !weight || !nome) {
                 throw new Error('Todos os campos são obrigatórios');
             }
 
-            // Formata a data e hora para o padrão ISO
-            const dateObj = new Date(date);
-            console.log('Data formatada:', dateObj);
-
             const palpite = {
+                nome: nome,
                 peso: weight,
                 data: date,
                 hora: time

@@ -88,9 +88,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const tbody = document.querySelector('#guessesList tbody');
             tbody.innerHTML = data.map(row => `
                 <tr>
+                    <td>${row.nome}</td>
                     <td>${row.data}</td>
                     <td>${row.hora}</td>
                     <td>${row.peso}kg</td>
+                    <td>${new Date(row.created_at).toLocaleString()}</td>
                 </tr>
             `).join('');
         } catch (error) {
