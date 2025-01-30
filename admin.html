@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Chá de Bebê da Helena</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .stats-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .login-form {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginSection" class="login-form">
+        <h2>Login Administrativo</h2>
+        <form id="loginForm" class="form-group">
+            <input type="password" id="adminPassword" required placeholder="Senha de Admin">
+            <button type="submit" class="button">Entrar</button>
+        </form>
+    </div>
+
+    <div id="adminSection" class="admin-container hidden">
+        <div class="stats-card">
+            <h2>Resumo de Confirmações</h2>
+            <div id="totalStats">
+                <p>Carregando estatísticas...</p>
+            </div>
+        </div>
+
+        <div class="stats-card">
+            <h2>Lista de Confirmações</h2>
+            <table id="confirmationsList">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>Quantidade de Pessoas</th>
+                        <th>Data de Confirmação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="stats-card">
+            <h2>Palpites</h2>
+            <table id="guessesList">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Hora</th>
+                        <th>Peso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js" type="module"></script>
+    <script src="admin.js" type="module"></script>
+</body>
+</html>

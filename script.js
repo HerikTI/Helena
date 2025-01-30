@@ -1,3 +1,5 @@
+import { supabase } from './supabase.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar contagem regressiva com efeito neon
     const eventDate = new Date('2025-03-15T15:00:00');
@@ -138,45 +140,63 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Formulário de confirmação de presença
     const rsvpForm = document.getElementById('rsvpForm');
-    rsvpForm.addEventListener('submit', function(e) {
+    rsvpForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
-        const guests = document.getElementById('guests').value;
-        
-        // Adiciona efeito de sucesso
-        this.classList.add('animate__animated', 'animate__bounceOutLeft');
-        
-        setTimeout(() => {
+        const qtdePessoas = parseInt(document.getElementById('guests').value) || 1;
+
+        try {
+            const { data, error } = await supabase
+                .from('confirmacoes')
+                .insert([
+                    { 
+                        nome: name, 
+                        telefone: phone,
+                        qtde_pessoas: qtdePessoas
+                    }
+                ]);
+
+            if (error) throw error;
+
+            // Mostra mensagem de sucesso
+            alert('Presença confirmada com sucesso!');
             showStep(3);
-        }, 1000);
+        } catch (error) {
+            console.error('Erro ao confirmar presença:', error);
+            alert('Ocorreu um erro ao confirmar sua presença. Por favor, tente novamente.');
+        }
     });
-    
-    // Formulário de palpites com animações
+
+    // Formulário de palpites
     const birthGuessForm = document.getElementById('birthGuessForm');
-    birthGuessForm.addEventListener('submit', function(e) {
+    birthGuessForm.addEventListener('submit', async function(e) {
         e.preventDefault();
+        const weight = document.getElementById('guessWeight').value;
         const date = document.getElementById('guessDate').value;
         const time = document.getElementById('guessTime').value;
-        const weight = document.getElementById('guessWeight').value;
-        
-        // Adiciona palpite com animação
-        const guessList = document.getElementById('guessList');
-        const guessCard = document.createElement('div');
-        guessCard.className = 'message-card animate__animated animate__fadeInUp';
-        guessCard.innerHTML = `
-            <h4>✨ Palpite de ${document.getElementById('name').value}</h4>
-            <p>🗓️ Data: ${new Date(date + 'T' + time).toLocaleString()}</p>
-            <p>⚖️ Peso: ${weight}kg</p>
-        `;
-        guessList.insertBefore(guessCard, guessList.firstChild);
-        
-        // Limpa formulário com efeito
-        this.reset();
-        this.classList.add('animate__animated', 'animate__pulse');
-        setTimeout(() => this.classList.remove('animate__animated', 'animate__pulse'), 1000);
+
+        try {
+            const { data, error } = await supabase
+                .from('palpites')
+                .insert([
+                    { 
+                        peso: weight,
+                        data: date,
+                        hora: time
+                    }
+                ]);
+
+            if (error) throw error;
+
+            // Mostra mensagem de sucesso
+            alert('Palpite registrado com sucesso!');
+        } catch (error) {
+            console.error('Erro ao registrar palpite:', error);
+            alert('Ocorreu um erro ao registrar seu palpite. Por favor, tente novamente.');
+        }
     });
-    
+
     // Formulário de mensagens com efeitos
     const messageForm = document.getElementById('messageForm');
     messageForm.addEventListener('submit', function(e) {
