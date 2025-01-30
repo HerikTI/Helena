@@ -54,22 +54,32 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentStep = 1;
     const steps = document.querySelectorAll('.step');
     
-    function showStep(stepNumber) {
-        const currentStepElement = document.getElementById(`step${currentStep}`);
-        const nextStepElement = document.getElementById(`step${stepNumber}`);
+    // Função para mostrar/esconder seções
+    function showStep(step) {
+        // Esconde todas as seções
+        document.querySelectorAll('.step').forEach(s => {
+            s.classList.remove('active');
+            s.classList.remove('animate__fadeIn');
+        });
         
-        currentStepElement.classList.add('animate__fadeOutLeft');
+        // Mostra a seção atual
+        const currentStep = document.getElementById(`step${step}`);
+        currentStep.classList.add('active');
+        currentStep.classList.add('animate__fadeIn');
         
-        setTimeout(() => {
-            currentStepElement.classList.remove('active', 'animate__fadeOutLeft');
-            nextStepElement.classList.add('active', 'animate__fadeInRight');
-            
-            setTimeout(() => {
-                nextStepElement.classList.remove('animate__fadeInRight');
-            }, 1000);
-            
-            currentStep = stepNumber;
-        }, 500);
+        // Timer só aparece na primeira tela
+        const timer = document.querySelector('.countdown-timer');
+        if (timer) {
+            timer.style.display = step === 1 ? 'flex' : 'none';
+        }
+        
+        // Seção de presentes só aparece na segunda tela
+        const giftSection = document.querySelector('.gift-section');
+        if (giftSection) {
+            giftSection.style.display = step === 2 ? 'block' : 'none';
+        }
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     
     // Quiz do ultrassom com efeitos visuais
@@ -184,86 +194,97 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Controle de estado dos formulários
+    let guessCompleted = false;
+    let messageCompleted = false;
+    const finishSection = document.querySelector('.finish-section');
+    const finishButton = document.getElementById('finishButton');
+
+    // Função para verificar se ambos os formulários foram completados
+    function checkFormsCompletion() {
+        if (guessCompleted && messageCompleted) {
+            finishSection.style.display = 'block';
+        }
+    }
+
     // Formulário de palpites
     const birthGuessForm = document.getElementById('birthGuessForm');
+    const skipGuessButton = document.getElementById('skipGuess');
+
     birthGuessForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const weight = document.getElementById('guessWeight').value;
         const date = document.getElementById('guessDate').value;
         const time = document.getElementById('guessTime').value;
+        const weight = document.getElementById('guessWeight').value;
 
         try {
             const { data, error } = await supabase
                 .from('palpites')
                 .insert([
                     { 
-                        peso: weight,
-                        data: date,
-                        hora: time
+                        nome: document.getElementById('name').value,
+                        data_palpite: date,
+                        hora_palpite: time,
+                        peso: weight
                     }
                 ]);
 
             if (error) throw error;
 
-            alert('Palpite registrado com sucesso!');
-            
-            // Adiciona palpite com animação
-            const guessList = document.getElementById('guessList');
-            const guessCard = document.createElement('div');
-            guessCard.className = 'message-card animate__animated animate__fadeInUp';
-            guessCard.innerHTML = `
-                <h4>✨ Palpite de ${document.getElementById('name').value}</h4>
-                <p>🗓️ Data: ${new Date(date + 'T' + time).toLocaleString()}</p>
-                <p>⚖️ Peso: ${weight}kg</p>
-            `;
-            guessList.insertBefore(guessCard, guessList.firstChild);
-            
-            this.reset();
-            this.classList.add('animate__animated', 'animate__pulse');
-            setTimeout(() => this.classList.remove('animate__animated', 'animate__pulse'), 1000);
+            birthGuessForm.style.opacity = '0.5';
+            birthGuessForm.style.pointerEvents = 'none';
+            guessCompleted = true;
+            checkFormsCompletion();
         } catch (error) {
-            console.error('Erro ao registrar palpite:', error);
-            alert('Ocorreu um erro ao registrar seu palpite. Por favor, tente novamente.');
+            console.error('Erro ao enviar palpite:', error);
+            alert('Ocorreu um erro ao enviar seu palpite. Por favor, tente novamente.');
         }
     });
 
-    // Formulário de mensagens
+    skipGuessButton.addEventListener('click', function() {
+        birthGuessForm.style.opacity = '0.5';
+        birthGuessForm.style.pointerEvents = 'none';
+        guessCompleted = true;
+        checkFormsCompletion();
+    });
+
+    // Formulário de mensagem
     const messageForm = document.getElementById('messageForm');
+    const skipMessageButton = document.getElementById('skipMessage');
+
     messageForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const message = document.getElementById('messageContent').value;
-        const name = document.getElementById('name').value;
 
         try {
             const { data, error } = await supabase
                 .from('mensagens')
-                .insert([
-                    { 
-                        nome: name,
-                        mensagem: message
-                    }
-                ]);
+                .insert([{ 
+                    nome: document.getElementById('name').value,
+                    mensagem: message
+                }]);
 
             if (error) throw error;
 
-            alert('Mensagem enviada com sucesso!');
-            
-            // Adiciona mensagem com animação
-            const messageWall = document.getElementById('messageWall');
-            const messageCard = document.createElement('div');
-            messageCard.className = 'message-card animate__animated animate__fadeInUp';
-            messageCard.innerHTML = `
-                <h4>✨ Mensagem de ${name}</h4>
-                <p>${message}</p>
-            `;
-            messageWall.insertBefore(messageCard, messageWall.firstChild);
-            
-            this.reset();
-            this.classList.add('animate__animated', 'animate__pulse');
-            setTimeout(() => this.classList.remove('animate__animated', 'animate__pulse'), 1000);
+            messageForm.style.opacity = '0.5';
+            messageForm.style.pointerEvents = 'none';
+            messageCompleted = true;
+            checkFormsCompletion();
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
             alert('Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.');
         }
+    });
+
+    skipMessageButton.addEventListener('click', function() {
+        messageForm.style.opacity = '0.5';
+        messageForm.style.pointerEvents = 'none';
+        messageCompleted = true;
+        checkFormsCompletion();
+    });
+
+    // Botão de finalizar
+    finishButton.addEventListener('click', function() {
+        showStep(4);
     });
 });

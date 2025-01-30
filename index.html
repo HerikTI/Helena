@@ -23,29 +23,35 @@
     </div>
 
     <div class="container">
-        <header class="glass-card animate__animated animate__fadeIn">
-            <h1 class="section-title">Chá de Bebê da Helena</h1>
+       
+
+        <!-- Etapa 1: Quiz do Ultrassom -->
+         
+        <section id="step1" class="step active glass-card animate__animated animate__fadeIn">
+            <h1 class="main-title">Chá de Bebê da Helena</h1>
             <p class="subtitle">✨ Venha celebrar conosco este momento mágico! ✨</p>
-            
-            <div id="countdown">
-                <div class="countdown-item">
-                    <span id="days">00</span>
-                    <span>Dias</span>
+
+            <!-- Timer -->
+            <div class="countdown-timer">
+                <div class="timer-item">
+                    <span id="days">43</span>
+                    <span>DIAS</span>
                 </div>
-                <div class="countdown-item">
-                    <span id="hours">00</span>
-                    <span>Horas</span>
+                <div class="timer-item">
+                    <span id="hours">23</span>
+                    <span>HORAS</span>
                 </div>
-                <div class="countdown-item">
-                    <span id="minutes">00</span>
-                    <span>Minutos</span>
+                <div class="timer-item">
+                    <span id="minutes">12</span>
+                    <span>MINUTOS</span>
                 </div>
-                <div class="countdown-item">
-                    <span id="seconds">00</span>
-                    <span>Segundos</span>
+                <div class="timer-item">
+                    <span id="seconds">26</span>
+                    <span>SEGUNDOS</span>
                 </div>
             </div>
 
+            <!-- Card de informações - apenas na primeira tela -->
             <div class="info-content">
                 <div class="info-item">
                     <div class="info-icon">
@@ -69,10 +75,7 @@
                     <p class="info-text">[Endereço do evento]</p>
                 </div>
             </div>
-        </header>
 
-        <!-- Etapa 1: Quiz do Ultrassom -->
-        <section id="step1" class="step active glass-card animate__animated animate__fadeIn">
             <h2 class="section-title">Para confirmar sua presença, Encontre a Helena</h2>
             <p class="subtitle">Entre as três imagens de ultrassom abaixo, apenas uma é da Helena. 
             Você consegue identificar qual é? 🤔</p>
@@ -98,7 +101,7 @@
             
             <form id="rsvpForm" class="form-group">
                 <input type="text" id="name" required placeholder="✨ Seu nome">
-                <input type="tel" id="phone" required placeholder="📱 Seu telefone">
+                <input type="tel" id="phone" placeholder="📱 Seu telefone (opcional)">
                 <div class="checkbox-group">
                     <input type="checkbox" id="hasCompanion" class="styled-checkbox">
                     <label for="hasCompanion">Levar acompanhante(s)</label>
@@ -114,49 +117,80 @@
                 </div>
                 <button type="submit" class="button">Confirmar Presença</button>
             </form>
+
+            <!-- Seção de Presentes - apenas na segunda tela -->
+            <div class="gift-section">
+                <h2 class="section-title">Presentinhos</h2>
+                <p class="subtitle">Para tornar este momento ainda mais especial! 🎁</p>
+                
+                <div class="gift-items">
+                    <div class="gift-item">
+                        <span class="gift-icon">👶</span>
+                        <p>Uma fralda tamanho M</p>
+                    </div>
+                    <div class="gift-item">
+                        <span class="gift-icon">🎁</span>
+                        <p>Um mimo</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Etapa 3: Palpites -->
         <section id="step3" class="step glass-card animate__animated animate__fadeIn">
-            <h2 class="section-title">Deixe seu Palpite</h2>
-            <p class="subtitle">Que tal participar de uma brincadeira? 🎮</p>
-            
-            <form id="birthGuessForm" class="form-group">
-                <h3 class="section-title">Quando você acha que a Helena vai nascer? 👶</h3>
-                <div class="input-group">
-                    <input type="date" id="guessDate" required>
-                    <input type="time" id="guessTime" required>
-                    <input type="number" id="guessWeight" step="0.01" required placeholder="✨ Peso em kg (ex: 3.2)">
-                </div>
-                <button type="submit" class="button">Enviar Palpite</button>
-            </form>
+            <div class="guess-section">
+                <h2 class="section-title">Deixe seu Palpite</h2>
+                <p class="subtitle">Que tal participar de uma brincadeira? 🎮</p>
+                
+                <form id="birthGuessForm" class="form-group">
+                    <h3 class="section-title">Quando você acha que a Helena vai nascer? 👶</h3>
+                    <div class="guess-inputs">
+                        <div class="input-group">
+                            <label for="guessDate">Data</label>
+                            <input type="date" id="guessDate" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="guessTime">Hora</label>
+                            <input type="time" id="guessTime" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="guessWeight">Peso (kg)</label>
+                            <input type="number" id="guessWeight" step="0.01" required placeholder="Ex: 3.2">
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="button">Enviar Palpite</button>
+                        <button type="button" class="button button-secondary" id="skipGuess">Não, obrigado</button>
+                    </div>
+                </form>
+            </div>
 
-            <div id="guessList" class="guesses-container"></div>
+            <div class="message-section">
+                <h2 class="section-title">Mensagem para Helena</h2>
+                <p class="subtitle">Deixe uma mensagem carinhosa para a Helena! 💝</p>
+                
+                <form id="messageForm" class="form-group">
+                    <textarea id="messageContent" required placeholder="✨ Sua mensagem..."></textarea>
+                    <div class="button-group">
+                        <button type="submit" class="button">Enviar Mensagem</button>
+                        <button type="button" class="button button-secondary" id="skipMessage">Não, obrigado</button>
+                    </div>
+                </form>
+            </div>
 
-            <h2 class="section-title">Mensagem para Helena</h2>
-            <p class="subtitle">Deixe uma mensagem carinhosa para a Helena! 💝</p>
-            
-            <form id="messageForm" class="form-group">
-                <textarea id="messageContent" required placeholder="✨ Sua mensagem..."></textarea>
-                <button type="submit" class="button">Enviar Mensagem</button>
-            </form>
-            <div id="messageWall" class="messages-container"></div>
+            <div class="finish-section" style="display: none;">
+                <button id="finishButton" class="button button-primary">Finalizar</button>
+            </div>
         </section>
 
-        <!-- Seção de Presentes -->
-        <section class="glass-card animate__animated animate__fadeIn">
-            <h2 class="section-title">Presentinhos</h2>
-            <p class="subtitle">Para tornar este momento ainda mais especial! 🎁</p>
-            
-            <div class="gift-items">
-                <div class="gift-item">
-                    <span class="gift-icon">👶</span>
-                    <p>Uma fralda tamanho M</p>
-                </div>
-                <div class="gift-item">
-                    <span class="gift-icon">🎁</span>
-                    <p>Um mimo</p>
-                </div>
+        <!-- Etapa 4: Agradecimento -->
+        <section id="step4" class="step glass-card animate__animated animate__fadeIn">
+            <h2 class="section-title">Obrigado! 💖</h2>
+            <p class="subtitle">Sua participação é muito especial para nós!</p>
+            <div class="thank-you-content">
+                <p>Mal podemos esperar para celebrar a chegada da Helena com você!</p>
+                <p>Nos vemos em breve! 🎉</p>
+                <img src="img/urso.png" alt="Ursinho" class="thank-you-bear">
             </div>
         </section>
     </div>
