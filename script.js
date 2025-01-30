@@ -105,8 +105,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isCorrect) {
                 quizResult.innerHTML = `
                     <div class="success-message">
-                        <h3>🎉 Parabéns!</h3>
-                        <p>Você encontrou a Helena! ❤️</p>
+                        <h3> Parabéns!</h3>
+                        <p>Você encontrou a Helena! </p>
                     </div>
                 `;
                 quizResult.classList.add('animate__bounceIn');
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 quizResult.innerHTML = `
                     <div class="error-message">
                         <h3>Ops!</h3>
-                        <p>Essa não é a Helena. Tente novamente! 🔍</p>
+                        <p>Essa não é a Helena. Tente novamente! </p>
                     </div>
                 `;
                 quizResult.classList.add('animate__shakeX');
@@ -213,23 +213,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
     birthGuessForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const date = document.getElementById('guessDate').value;
-        const time = document.getElementById('guessTime').value;
-        const weight = document.getElementById('guessWeight').value;
-
+        
         try {
+            const date = document.getElementById('guessDate').value;
+            const time = document.getElementById('guessTime').value;
+            const weight = parseFloat(document.getElementById('guessWeight').value);
+
+            // Validações
+            if (!date || !time || !weight) {
+                throw new Error('Todos os campos são obrigatórios');
+            }
+
+            // Formata a data e hora para o padrão ISO
+            const dateObj = new Date(date);
+            console.log('Data formatada:', dateObj);
+
+            const palpite = {
+                peso: weight,
+                data: date,
+                hora: time
+            };
+
+            console.log('Dados a serem enviados:', palpite);
+
             const { data, error } = await supabase
                 .from('palpites')
-                .insert([
-                    { 
-                        nome: document.getElementById('name').value,
-                        data_palpite: date,
-                        hora_palpite: time,
-                        peso: weight
-                    }
-                ]);
+                .insert([palpite]);
 
-            if (error) throw error;
+            if (error) {
+                console.error('Erro completo:', JSON.stringify(error, null, 2));
+                throw error;
+            }
+
+            console.log('Resposta do Supabase:', data);
 
             birthGuessForm.style.opacity = '0.5';
             birthGuessForm.style.pointerEvents = 'none';
@@ -237,7 +253,11 @@ document.addEventListener('DOMContentLoaded', function() {
             checkFormsCompletion();
         } catch (error) {
             console.error('Erro ao enviar palpite:', error);
-            alert('Ocorreu um erro ao enviar seu palpite. Por favor, tente novamente.');
+            if (error.message) {
+                alert(error.message);
+            } else {
+                alert('Ocorreu um erro ao enviar seu palpite. Por favor, tente novamente.');
+            }
         }
     });
 
@@ -254,17 +274,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     messageForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const message = document.getElementById('messageContent').value;
-
+        
         try {
+            const nome = document.getElementById('name').value;
+            const mensagem = document.getElementById('messageContent').value;
+
+            if (!nome || !mensagem) {
+                throw new Error('Nome e mensagem são obrigatórios');
+            }
+
             const { data, error } = await supabase
                 .from('mensagens')
                 .insert([{ 
-                    nome: document.getElementById('name').value,
-                    mensagem: message
+                    nome: nome,
+                    mensagem: mensagem
                 }]);
 
-            if (error) throw error;
+            if (error) {
+                console.error('Erro completo:', JSON.stringify(error, null, 2));
+                throw error;
+            }
 
             messageForm.style.opacity = '0.5';
             messageForm.style.pointerEvents = 'none';
@@ -272,7 +301,11 @@ document.addEventListener('DOMContentLoaded', function() {
             checkFormsCompletion();
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
-            alert('Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.');
+            if (error.message) {
+                alert(error.message);
+            } else {
+                alert('Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.');
+            }
         }
     });
 
