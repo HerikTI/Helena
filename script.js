@@ -1,5 +1,3 @@
-import { supabase } from './supabase.js';
-
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar contagem regressiva com efeito neon
     const eventDate = new Date('2025-03-15T15:00:00');
@@ -125,26 +123,44 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 1500);
             }
         });
-        
-        // Adiciona efeito hover
-        card.addEventListener('mouseover', function() {
-            this.style.transform = 'scale(1.02)';
-        });
-        
-        card.addEventListener('mouseout', function() {
-            if (!this.classList.contains('selected')) {
-                this.style.transform = 'scale(1)';
-            }
-        });
     });
     
+    // Checkbox de acompanhante
+    const hasCompanionCheckbox = document.getElementById('hasCompanion');
+    const companionSection = document.getElementById('companionSection');
+    const guestsSelect = document.getElementById('guests');
+    const companionNames = document.getElementById('companionNames');
+
+    hasCompanionCheckbox.addEventListener('change', function() {
+        companionSection.style.display = this.checked ? 'block' : 'none';
+        if (this.checked) {
+            guestsSelect.setAttribute('required', 'required');
+        } else {
+            guestsSelect.removeAttribute('required');
+            guestsSelect.value = '';
+            companionNames.value = '';
+        }
+    });
+
     // Formulário de confirmação de presença
     const rsvpForm = document.getElementById('rsvpForm');
     rsvpForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
-        const qtdePessoas = parseInt(document.getElementById('guests').value) || 1;
+        const hasCompanion = document.getElementById('hasCompanion').checked;
+        
+        // Validação dos campos de acompanhantes
+        if (hasCompanion) {
+            const qtdeAcompanhantes = guestsSelect.value;
+            if (!qtdeAcompanhantes) {
+                alert('Por favor, selecione o número de acompanhantes');
+                return;
+            }
+        }
+
+        const qtdeAcompanhantes = hasCompanion ? parseInt(guestsSelect.value) || 0 : 0;
+        const nomesAcompanhantes = hasCompanion ? companionNames.value : '';
 
         try {
             const { data, error } = await supabase
@@ -153,13 +169,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     { 
                         nome: name, 
                         telefone: phone,
-                        qtde_pessoas: qtdePessoas
+                        qtde_pessoas: qtdeAcompanhantes,
+                        nomes_acompanhantes: nomesAcompanhantes
                     }
                 ]);
 
             if (error) throw error;
 
-            // Mostra mensagem de sucesso
             alert('Presença confirmada com sucesso!');
             showStep(3);
         } catch (error) {
@@ -189,47 +205,65 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (error) throw error;
 
-            // Mostra mensagem de sucesso
             alert('Palpite registrado com sucesso!');
+            
+            // Adiciona palpite com animação
+            const guessList = document.getElementById('guessList');
+            const guessCard = document.createElement('div');
+            guessCard.className = 'message-card animate__animated animate__fadeInUp';
+            guessCard.innerHTML = `
+                <h4>✨ Palpite de ${document.getElementById('name').value}</h4>
+                <p>🗓️ Data: ${new Date(date + 'T' + time).toLocaleString()}</p>
+                <p>⚖️ Peso: ${weight}kg</p>
+            `;
+            guessList.insertBefore(guessCard, guessList.firstChild);
+            
+            this.reset();
+            this.classList.add('animate__animated', 'animate__pulse');
+            setTimeout(() => this.classList.remove('animate__animated', 'animate__pulse'), 1000);
         } catch (error) {
             console.error('Erro ao registrar palpite:', error);
             alert('Ocorreu um erro ao registrar seu palpite. Por favor, tente novamente.');
         }
     });
 
-    // Formulário de mensagens com efeitos
+    // Formulário de mensagens
     const messageForm = document.getElementById('messageForm');
-    messageForm.addEventListener('submit', function(e) {
+    messageForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const content = document.getElementById('messageContent').value;
-        
-        // Adiciona mensagem com animação
-        const messageWall = document.getElementById('messageWall');
-        const messageCard = document.createElement('div');
-        messageCard.className = 'message-card animate__animated animate__fadeInUp';
-        messageCard.innerHTML = `
-            <h4>💝 Mensagem de ${document.getElementById('name').value}</h4>
-            <p>${content}</p>
-        `;
-        messageWall.insertBefore(messageCard, messageWall.firstChild);
-        
-        // Limpa formulário com efeito
-        this.reset();
-        this.classList.add('animate__animated', 'animate__pulse');
-        setTimeout(() => this.classList.remove('animate__animated', 'animate__pulse'), 1000);
-    });
-    
-    // Adiciona animações aos cards quando aparecem na tela
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate__animated', 'animate__fadeInUp');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
-    
-    document.querySelectorAll('.glass-card').forEach(card => {
-        observer.observe(card);
+        const message = document.getElementById('messageContent').value;
+        const name = document.getElementById('name').value;
+
+        try {
+            const { data, error } = await supabase
+                .from('mensagens')
+                .insert([
+                    { 
+                        nome: name,
+                        mensagem: message
+                    }
+                ]);
+
+            if (error) throw error;
+
+            alert('Mensagem enviada com sucesso!');
+            
+            // Adiciona mensagem com animação
+            const messageWall = document.getElementById('messageWall');
+            const messageCard = document.createElement('div');
+            messageCard.className = 'message-card animate__animated animate__fadeInUp';
+            messageCard.innerHTML = `
+                <h4>✨ Mensagem de ${name}</h4>
+                <p>${message}</p>
+            `;
+            messageWall.insertBefore(messageCard, messageWall.firstChild);
+            
+            this.reset();
+            this.classList.add('animate__animated', 'animate__pulse');
+            setTimeout(() => this.classList.remove('animate__animated', 'animate__pulse'), 1000);
+        } catch (error) {
+            console.error('Erro ao enviar mensagem:', error);
+            alert('Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.');
+        }
     });
 });

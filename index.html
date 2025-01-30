@@ -99,12 +99,19 @@
             <form id="rsvpForm" class="form-group">
                 <input type="text" id="name" required placeholder="✨ Seu nome">
                 <input type="tel" id="phone" required placeholder="📱 Seu telefone">
-                <select id="guests" required>
-                    <option value="">👥 Número de pessoas</option>
-                    <option value="1">1 pessoa</option>
-                    <option value="2">2 pessoas</option>
-                    <option value="3">3 pessoas</option>
-                </select>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="hasCompanion" class="styled-checkbox">
+                    <label for="hasCompanion">Levar acompanhante(s)</label>
+                </div>
+                <div id="companionSection" class="companion-section" style="display: none;">
+                    <select id="guests">
+                        <option value="">👥 Número de acompanhantes</option>
+                        <option value="1">1 pessoa</option>
+                        <option value="2">2 pessoas</option>
+                        <option value="3">3 pessoas</option>
+                    </select>
+                    <textarea id="companionNames" placeholder="✨ Nome dos acompanhantes (um por linha)" rows="3"></textarea>
+                </div>
                 <button type="submit" class="button">Confirmar Presença</button>
             </form>
         </section>
@@ -154,7 +161,7 @@
         </section>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase.js" type="module"></script>
-    <script src="script.js" type="module"></script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

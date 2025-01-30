@@ -1,5 +1,3 @@
-import { supabase } from './supabase.js';
-
 // Senha de admin (você deve alterar para uma senha segura)
 const ADMIN_PASSWORD = 'helena2025';
 
@@ -32,11 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
         await loadStats();
         await loadConfirmations();
         await loadGuesses();
+        await loadMessages();
     }
 
     async function loadStats() {
         try {
-            // Buscar total de confirmações e pessoas
             const { data, error } = await supabase
                 .from('confirmacoes')
                 .select('qtde_pessoas');
@@ -44,12 +42,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (error) throw error;
 
             const totalConfirmacoes = data.length;
-            const totalPessoas = data.reduce((sum, row) => sum + row.qtde_pessoas, 0);
+            // Total de pessoas é a soma dos acompanhantes mais o número de confirmações
+            const totalPessoas = data.reduce((sum, row) => sum + (row.qtde_pessoas || 0), 0) + totalConfirmacoes;
 
-            document.getElementById('totalStats').innerHTML = `
-                <p>Total de Confirmações: <strong>${totalConfirmacoes}</strong></p>
-                <p>Total de Pessoas: <strong>${totalPessoas}</strong></p>
-            `;
+            document.getElementById('totalConfirmacoes').textContent = totalConfirmacoes;
+            document.getElementById('totalPessoas').textContent = totalPessoas;
         } catch (error) {
             console.error('Erro ao carregar estatísticas:', error);
         }
@@ -69,7 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <tr>
                     <td>${row.nome}</td>
                     <td>${row.telefone}</td>
-                    <td>${row.qtde_pessoas}</td>
+                    <td>${row.qtde_pessoas || 0}</td>
+                    <td>${row.nomes_acompanhantes || '-'}</td>
                     <td>${new Date(row.created_at).toLocaleString()}</td>
                 </tr>
             `).join('');
@@ -97,6 +95,28 @@ document.addEventListener('DOMContentLoaded', function() {
             `).join('');
         } catch (error) {
             console.error('Erro ao carregar palpites:', error);
+        }
+    }
+
+    async function loadMessages() {
+        try {
+            const { data, error } = await supabase
+                .from('mensagens')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            const tbody = document.querySelector('#messagesList tbody');
+            tbody.innerHTML = data.map(row => `
+                <tr>
+                    <td>${row.nome}</td>
+                    <td>${row.mensagem}</td>
+                    <td>${new Date(row.created_at).toLocaleString()}</td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error('Erro ao carregar mensagens:', error);
         }
     }
 });
