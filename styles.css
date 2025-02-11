@@ -940,42 +940,44 @@ body::before {
 .diaper-option {
     padding: 15px;
     border-radius: 10px;
-    background: #4a4a4a;
+    background: #f8f8f8;
     margin: 5px 0;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
+    border: 2px solid #e0e0e0;
     position: relative;
-    color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .diaper-option:hover:not(.disabled) {
-    background: #5a5a5a;
+    background: #fff;
+    border-color: #ff69b4;
     transform: translateY(-2px);
 }
 
 .diaper-option.selected {
-    background: #ff69b4;
-    border-color: #ff8dc2;
+    background: #fff;
+    border-color: #ff69b4;
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
 }
 
 .diaper-option.disabled {
-    opacity: 0.5;
+    opacity: 0.7;
     cursor: not-allowed;
-    background: #3a3a3a;
+    background: #f0f0f0;
 }
 
 .diaper-option p {
     margin: 0;
     font-weight: 500;
-    color: white;
+    color: #333;
 }
 
 .diaper-quantity {
     font-size: 0.9em;
-    color: rgba(255, 255, 255, 0.9);
+    color: #666;
     margin-top: 5px;
 }
 
@@ -983,12 +985,16 @@ body::before {
 .gift-suggestions {
     margin: 15px 0;
     text-align: center;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .gift-suggestions h4 {
-    color: var(--neon-pink);
-    margin: 0 0 10px;
-    font-size: 1rem;
+    color: #ff69b4;
+    margin: 0 0 15px;
+    font-size: 1.1rem;
 }
 
 .suggestions-list {
@@ -1002,36 +1008,43 @@ body::before {
 }
 
 .suggestions-list li {
-    background: #4a4a4a;
+    background: #f8f8f8;
     padding: 8px 15px;
     border-radius: 20px;
     font-size: 0.9rem;
-    color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: #333;
+    border: 1px solid #e0e0e0;
     transition: all 0.3s ease;
 }
 
 .suggestions-list li:hover {
-    background: #ff69b4;
+    background: #fff;
+    border-color: #ff69b4;
     transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(255, 105, 180, 0.2);
 }
 
 /* Estilo específico para iOS */
 @supports (-webkit-touch-callout: none) {
     .diaper-option,
     .suggestions-list li {
-        background: #4a4a4a !important;
-        -webkit-backdrop-filter: none !important;
-        backdrop-filter: none !important;
+        background: #f8f8f8 !important;
+        border: 2px solid #e0e0e0 !important;
     }
 
     .diaper-option.selected {
-        background: #ff69b4 !important;
+        border-color: #ff69b4 !important;
+        background: #fff !important;
     }
 
     .diaper-option:hover:not(.disabled),
     .suggestions-list li:hover {
-        background: #ff69b4 !important;
+        border-color: #ff69b4 !important;
+        background: #fff !important;
+    }
+
+    .gift-suggestions {
+        background: #fff !important;
     }
 }
 
