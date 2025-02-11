@@ -937,48 +937,34 @@ body::before {
 }
 
 /* Estilos para seleção de fraldas */
-.diapers-selection {
-    margin-top: 15px;
-}
-
-.diapers-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 300px;
-    margin: 0 auto;
-}
-
 .diaper-option {
     padding: 15px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.2);
+    background: #4a4a4a;
     margin: 5px 0;
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid transparent;
     position: relative;
-    /* Suporte para iOS */
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
     color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .diaper-option:hover:not(.disabled) {
-    background: rgba(255, 255, 255, 0.3);
+    background: #5a5a5a;
     transform: translateY(-2px);
 }
 
 .diaper-option.selected {
-    background: rgba(255, 192, 203, 0.4);
-    border-color: rgba(255, 192, 203, 0.8);
+    background: #ff69b4;
+    border-color: #ff8dc2;
     transform: translateY(-2px);
 }
 
 .diaper-option.disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    background: rgba(128, 128, 128, 0.2);
+    background: #3a3a3a;
 }
 
 .diaper-option p {
@@ -989,51 +975,11 @@ body::before {
 
 .diaper-quantity {
     font-size: 0.9em;
-    color: white;
+    color: rgba(255, 255, 255, 0.9);
     margin-top: 5px;
 }
 
 /* Sugestões de mimos */
-.suggestions-list li {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    color: white;
-    position: relative;
-    /* Suporte para iOS */
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
-}
-
-.suggestions-list li:hover {
-    background: rgba(255, 192, 203, 0.3);
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-}
-
-/* Fallback para iOS */
-@supports not (backdrop-filter: blur(5px)) {
-    .diaper-option,
-    .suggestions-list li {
-        background: rgba(255, 255, 255, 0.8);
-        color: #333;
-    }
-
-    .diaper-option p,
-    .diaper-quantity {
-        color: #333;
-    }
-
-    .diaper-option.selected {
-        background: rgba(255, 192, 203, 0.8);
-    }
-
-    .suggestions-list li:hover {
-        background: rgba(255, 192, 203, 0.8);
-    }
-}
-
 .gift-suggestions {
     margin: 15px 0;
     text-align: center;
@@ -1056,18 +1002,37 @@ body::before {
 }
 
 .suggestions-list li {
-    background: rgba(255, 255, 255, 0.1);
+    background: #4a4a4a;
     padding: 8px 15px;
     border-radius: 20px;
     font-size: 0.9rem;
     color: white;
-    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
 
 .suggestions-list li:hover {
-    background: rgba(255, 192, 203, 0.2);
+    background: #ff69b4;
     transform: translateY(-2px);
-    transition: all 0.3s ease;
+}
+
+/* Estilo específico para iOS */
+@supports (-webkit-touch-callout: none) {
+    .diaper-option,
+    .suggestions-list li {
+        background: #4a4a4a !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+    }
+
+    .diaper-option.selected {
+        background: #ff69b4 !important;
+    }
+
+    .diaper-option:hover:not(.disabled),
+    .suggestions-list li:hover {
+        background: #ff69b4 !important;
+    }
 }
 
 /* Ajustes para mobile */
