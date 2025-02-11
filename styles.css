@@ -1047,3 +1047,51 @@ body::after {
 *[class*="light-"] {
     display: none !important;
 }
+
+/* Controle de música */
+.music-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.music-button {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.music-button:hover {
+    background: rgba(255, 192, 203, 0.3);
+    transform: scale(1.1);
+}
+
+.music-button .material-icons {
+    color: white;
+    font-size: 24px;
+}
+
+.music-button.playing {
+    background: rgba(255, 192, 203, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 192, 203, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 192, 203, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 192, 203, 0);
+    }
+}

@@ -414,4 +414,38 @@ document.addEventListener('DOMContentLoaded', function() {
     if (giftSection) {
         observer.observe(giftSection);
     }
+
+    // Controle de música
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    const musicIcon = musicToggle.querySelector('.material-icons');
+    let isPlaying = false;
+
+    // Tentar iniciar a música automaticamente
+    try {
+        bgMusic.play().then(() => {
+            isPlaying = true;
+            musicToggle.classList.add('playing');
+            musicIcon.textContent = 'music_note';
+        }).catch(() => {
+            // Se o autoplay for bloqueado, não faz nada
+            console.log('Autoplay bloqueado pelo navegador');
+        });
+    } catch (e) {
+        console.log('Erro ao tentar reproduzir música:', e);
+    }
+
+    // Alternar música ao clicar no botão
+    musicToggle.addEventListener('click', () => {
+        if (isPlaying) {
+            bgMusic.pause();
+            musicToggle.classList.remove('playing');
+            musicIcon.textContent = 'music_off';
+        } else {
+            bgMusic.play();
+            musicToggle.classList.add('playing');
+            musicIcon.textContent = 'music_note';
+        }
+        isPlaying = !isPlaying;
+    });
 });
