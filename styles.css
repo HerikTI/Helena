@@ -788,39 +788,6 @@ body::before {
     margin: 20px 0;
 }
 
-.gift-items {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-.gift-item {
-    text-align: center;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 15px;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
-    max-width: 400px;
-    width: 100%;
-}
-
-
-
-.gift-icon {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-    display: block;
-}
-
-.gift-note {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.9rem;
-    margin: 15px 0;
-    font-style: italic;
-}
-
 /* Botão de confirmação */
 .button {
     width: 100%;
@@ -908,15 +875,8 @@ body::before {
     padding: 20px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
     max-width: 400px;
     width: 100%;
-}
-
-.gift-item:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--glass-shadow);
 }
 
 .gift-icon {
