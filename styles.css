@@ -41,6 +41,7 @@ body::before {
     pointer-events: none;
     animation: twinkle 8s infinite linear;
     opacity: 0.3;
+    display: none !important;
 }
 
 @keyframes twinkle {
@@ -66,25 +67,6 @@ body::before {
     margin-bottom: 30px;
 }
 
-.glass-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        transparent
-    );
-    transition: 0.5s;
-}
-
-.glass-card:hover::before {
-    left: 100%;
-}
 
 .glass-card:hover {
     transform: translateY(-5px);
@@ -545,27 +527,6 @@ body::before {
     display: block;
 }
 
-/* Efeito de Brilho nos Cards */
-.glass-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        transparent
-    );
-    transition: 0.5s;
-}
-
-.glass-card:hover::after {
-    left: 100%;
-}
-
 /* Scrollbar Personalizada */
 ::-webkit-scrollbar {
     width: 8px;
@@ -996,6 +957,11 @@ body::before {
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid transparent;
+    position: relative;
+    /* Suporte para iOS */
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    color: white;
 }
 
 .diaper-option:hover:not(.disabled) {
@@ -1018,46 +984,54 @@ body::before {
 .diaper-option p {
     margin: 0;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
+    color: white;
 }
 
 .diaper-quantity {
     font-size: 0.9em;
-    color: rgba(255, 255, 255, 0.8);
+    color: white;
     margin-top: 5px;
 }
 
-/* Ajustes para mobile */
-@media (max-width: 768px) {
-    .step {
-        padding: 20px;
-        margin: 10px;
-        border-radius: 15px;
-    }
-
-    .main-title {
-        font-size: 2rem;
-    }
-
-    .glass-card {
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .guesses-container,
-    .messages-container {
-        margin: 15px 0;
-    }
-
-    .message-card {
-        margin: 8px 0;
-    }
+/* Sugestões de mimos */
+.suggestions-list li {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: white;
+    position: relative;
+    /* Suporte para iOS */
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
 }
 
-/* Animação do ursinho */
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+.suggestions-list li:hover {
+    background: rgba(255, 192, 203, 0.3);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Fallback para iOS */
+@supports not (backdrop-filter: blur(5px)) {
+    .diaper-option,
+    .suggestions-list li {
+        background: rgba(255, 255, 255, 0.8);
+        color: #333;
+    }
+
+    .diaper-option p,
+    .diaper-quantity {
+        color: #333;
+    }
+
+    .diaper-option.selected {
+        background: rgba(255, 192, 203, 0.8);
+    }
+
+    .suggestions-list li:hover {
+        background: rgba(255, 192, 203, 0.8);
+    }
 }
 
 .gift-suggestions {
@@ -1094,4 +1068,52 @@ body::before {
     background: rgba(255, 192, 203, 0.2);
     transform: translateY(-2px);
     transition: all 0.3s ease;
+}
+
+/* Ajustes para mobile */
+@media (max-width: 768px) {
+    .step {
+        padding: 20px;
+        margin: 10px;
+        border-radius: 15px;
+    }
+
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .glass-card {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .guesses-container,
+    .messages-container {
+        margin: 15px 0;
+    }
+
+    .message-card {
+        margin: 8px 0;
+    }
+}
+
+/* Animação do ursinho */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Remover efeito de luz do cursor */
+body::before,
+body::after {
+    display: none !important;
+}
+
+.light {
+    display: none !important;
+}
+
+/* Desativar qualquer outro efeito de luz */
+*[class*="light-"] {
+    display: none !important;
 }

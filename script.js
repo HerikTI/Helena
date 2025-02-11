@@ -279,6 +279,16 @@ document.addEventListener('DOMContentLoaded', function() {
             birthGuessForm.style.pointerEvents = 'none';
             guessCompleted = true;
             checkFormsCompletion();
+
+            // Rolar suavemente até o próximo formulário
+            const messageForm = document.getElementById('messageForm');
+            messageForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Focar no primeiro campo do formulário de mensagem
+            const messageInput = document.getElementById('message');
+            setTimeout(() => {
+                messageInput.focus();
+            }, 800); // Espera a rolagem terminar antes de focar
         } catch (error) {
             console.error('Erro ao enviar palpite:', error);
             if (error.message) {
