@@ -873,10 +873,17 @@ body::before {
 .gift-item {
     text-align: center;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(252, 130, 252, 0.532);
     border-radius: 15px;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
     max-width: 400px;
     width: 100%;
+}
+
+.gift-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--glass-shadow);
 }
 
 .gift-icon {
