@@ -1,54 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar contagem regressiva com efeito neon
-    const eventDate = new Date('2025-03-15T15:00:00');
+    const eventDate = new Date('2025-03-08T15:30:00');
     
     function updateCountdown() {
         const now = new Date();
         const diff = eventDate - now;
-        
+
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        
-        // Adiciona animação de pulso ao mudar os números
-        ['days', 'hours', 'minutes', 'seconds'].forEach(id => {
-            const element = document.getElementById(id);
-            const currentValue = element.textContent;
-            const newValue = String(eval(id)).padStart(2, '0');
-            
-            if (currentValue !== newValue) {
-                element.style.animation = 'none';
-                element.offsetHeight; // Trigger reflow
-                element.style.animation = 'pulse 0.5s';
-            }
-            element.textContent = newValue;
-        });
+
+        document.getElementById('days').textContent = String(days).padStart(2, '0');
+        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
     }
     
     setInterval(updateCountdown, 1000);
     updateCountdown();
-    
-    // Máscara para telefone com efeito visual
-    const phoneInput = document.getElementById('phone');
-    phoneInput.addEventListener('input', function(e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 0) {
-            value = '(' + value;
-            if (value.length > 3) {
-                value = value.slice(0, 3) + ') ' + value.slice(3);
-                if (value.length > 10) {
-                    value = value.slice(0, 10) + '-' + value.slice(10, 14);
-                }
-            }
-        }
-        e.target.value = value;
-        
-        // Adiciona efeito de brilho ao digitar
-        this.style.animation = 'none';
-        this.offsetHeight;
-        this.style.animation = 'glow 0.5s';
-    });
     
     // Gerenciar etapas com transições suaves
     let currentStep = 1;
@@ -105,8 +75,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isCorrect) {
                 quizResult.innerHTML = `
                     <div class="success-message">
-                        <h3> Parabéns!</h3>
-                        <p>Você encontrou a Helena! </p>
+                        <h3> Parabéns! 👶🎉</h3>
+                        <p>Você encontrou a Helena!🩷 </p>
                     </div>
                 `;
                 quizResult.classList.add('animate__bounceIn');
@@ -118,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 quizResult.innerHTML = `
                     <div class="error-message">
                         <h3>Ops!</h3>
-                        <p>Essa não é a Helena. Tente novamente! </p>
+                        <p>Essa não é a Helena ❌❌. Tente novamente!  </p>
                     </div>
                 `;
                 quizResult.classList.add('animate__shakeX');
@@ -156,40 +126,100 @@ document.addEventListener('DOMContentLoaded', function() {
     const rsvpForm = document.getElementById('rsvpForm');
     rsvpForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const hasCompanion = document.getElementById('hasCompanion').checked;
         
-        // Validação dos campos de acompanhantes
-        if (hasCompanion) {
-            const qtdeAcompanhantes = guestsSelect.value;
-            if (!qtdeAcompanhantes) {
-                alert('Por favor, selecione o número de acompanhantes');
-                return;
-            }
-        }
-
-        const qtdeAcompanhantes = hasCompanion ? parseInt(guestsSelect.value) || 0 : 0;
+        const name = document.getElementById('name').value;
+        const hasCompanion = document.getElementById('hasCompanion').checked;
+        const guests = document.getElementById('guests');
+        const companionNames = document.getElementById('companionNames');
+        const qtdeAcompanhantes = hasCompanion ? parseInt(guests.value) : 0;
         const nomesAcompanhantes = hasCompanion ? companionNames.value : '';
 
+        // Verificar se uma fralda foi selecionada
+        const selectedDiaperDiv = document.querySelector('.diaper-option.selected');
+        if (!selectedDiaperDiv) {
+            alert('Por favor, selecione uma fralda antes de confirmar sua presença.');
+            return;
+        }
+
         try {
-            const { data, error } = await supabase
+            // 1. Inserir confirmação
+            console.log('Dados da confirmação:', {
+                nome: name,
+                qtde_pessoas: qtdeAcompanhantes,
+                nomes_acompanhantes: nomesAcompanhantes
+            });
+
+            const { data: confirmationData, error: confirmationError } = await supabase
                 .from('confirmacoes')
                 .insert([
                     { 
                         nome: name, 
-                        telefone: phone,
                         qtde_pessoas: qtdeAcompanhantes,
                         nomes_acompanhantes: nomesAcompanhantes
                     }
                 ]);
 
-            if (error) throw error;
+            if (confirmationError) {
+                console.error('Erro na confirmação:', confirmationError);
+                throw confirmationError;
+            }
+
+            // 2. Inserir reserva de fralda
+            const diaperId = parseInt(selectedDiaperDiv.dataset.id);
+            console.log('Dados da reserva:', {
+                fralda_id: diaperId,
+                nome: name,
+                quantidade: 1
+            });
+
+            const { data: reservationData, error: reservationError } = await supabase
+                .from('reservas_fraldas')
+                .insert([
+                    {
+                        fralda_id: diaperId,
+                        nome: name,
+                        quantidade: 1
+                    }
+                ]);
+
+            if (reservationError) {
+                console.error('Erro na reserva:', reservationError);
+                throw reservationError;
+            }
+
+            // 3. Primeiro, buscar a quantidade atual
+            const { data: fralda, error: getFraldaError } = await supabase
+                .from('fraldas')
+                .select('quantidade')
+                .eq('id', diaperId)
+                .single();
+
+            if (getFraldaError) {
+                console.error('Erro ao buscar fralda:', getFraldaError);
+                throw getFraldaError;
+            }
+
+            if (fralda.quantidade <= 0) {
+                throw new Error('Não há mais fraldas disponíveis deste tamanho.');
+            }
+
+            // Atualizar a quantidade
+            const { error: updateError } = await supabase
+                .from('fraldas')
+                .update({ quantidade: fralda.quantidade - 1 })
+                .eq('id', diaperId);
+
+            if (updateError) {
+                console.error('Erro na atualização:', updateError);
+                throw updateError;
+            }
 
             alert('Presença confirmada com sucesso!');
             showStep(3);
         } catch (error) {
-            console.error('Erro ao confirmar presença:', error);
+            console.error('Erro detalhado:', error);
+            console.error('Mensagem do erro:', error.message);
+            console.error('Detalhes do erro:', JSON.stringify(error, null, 2));
             alert('Ocorreu um erro ao confirmar sua presença. Por favor, tente novamente.');
         }
     });
@@ -318,4 +348,60 @@ document.addEventListener('DOMContentLoaded', function() {
     finishButton.addEventListener('click', function() {
         showStep(4);
     });
+
+    // Carregar e gerenciar fraldas
+    let selectedDiaper = null;
+    
+    async function loadDiapers() {
+        try {
+            const { data: fraldas, error } = await supabase
+                .from('fraldas')
+                .select('*')
+                .order('tamanho');
+
+            if (error) throw error;
+
+            const diapersList = document.getElementById('diapersList');
+            diapersList.innerHTML = fraldas.map(fralda => `
+                <div class="diaper-option ${fralda.quantidade === 0 ? 'disabled' : ''}" 
+                     data-id="${fralda.id}" 
+                     data-size="${fralda.tamanho}">
+                    <p>Fralda ${fralda.tamanho}</p>
+                    <div class="diaper-quantity">Restam ${fralda.quantidade} unidades</div>
+                </div>
+            `).join('');
+
+            // Adicionar eventos de clique
+            document.querySelectorAll('.diaper-option').forEach(option => {
+                if (option.classList.contains('disabled')) return;
+                
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.diaper-option').forEach(opt => 
+                        opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedDiaper = {
+                        id: this.dataset.id,
+                        size: this.dataset.size
+                    };
+                });
+            });
+        } catch (error) {
+            console.error('Erro ao carregar fraldas:', error);
+        }
+    }
+
+    // Carregar fraldas quando a seção de presentes ficar visível
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                loadDiapers();
+                observer.disconnect();
+            }
+        });
+    });
+    
+    const giftSection = document.querySelector('.gift-section');
+    if (giftSection) {
+        observer.observe(giftSection);
+    }
 });

@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         await loadConfirmations();
         await loadGuesses();
         await loadMessages();
+        await loadDiaperReservations();
     }
 
     async function loadStats() {
@@ -42,11 +43,41 @@ document.addEventListener('DOMContentLoaded', function() {
             if (error) throw error;
 
             const totalConfirmacoes = data.length;
-            // Total de pessoas é a soma dos acompanhantes mais o número de confirmações
             const totalPessoas = data.reduce((sum, row) => sum + (row.qtde_pessoas || 0), 0) + totalConfirmacoes;
 
             document.getElementById('totalConfirmacoes').textContent = totalConfirmacoes;
             document.getElementById('totalPessoas').textContent = totalPessoas;
+
+            // Carregar estatísticas das fraldas
+            const { data: fraldas, error: fraldasError } = await supabase
+                .from('fraldas')
+                .select('*')
+                .order('tamanho');
+
+            if (fraldasError) throw fraldasError;
+
+            const diaperStats = document.getElementById('diaperStats');
+            if (diaperStats) {
+                diaperStats.innerHTML = `
+                    <h3>Fraldas Disponíveis</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tamanho</th>
+                                <th>Quantidade Restante</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${fraldas.map(fralda => `
+                                <tr>
+                                    <td>Tamanho ${fralda.tamanho}</td>
+                                    <td>${fralda.quantidade} unidades</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
         } catch (error) {
             console.error('Erro ao carregar estatísticas:', error);
         }
@@ -65,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
             tbody.innerHTML = data.map(row => `
                 <tr>
                     <td>${row.nome}</td>
-                    <td>${row.telefone}</td>
                     <td>${row.qtde_pessoas || 0}</td>
                     <td>${row.nomes_acompanhantes || '-'}</td>
                     <td>${new Date(row.created_at).toLocaleString()}</td>
@@ -119,6 +149,32 @@ document.addEventListener('DOMContentLoaded', function() {
             `).join('');
         } catch (error) {
             console.error('Erro ao carregar mensagens:', error);
+        }
+    }
+
+    async function loadDiaperReservations() {
+        try {
+            const { data, error } = await supabase
+                .from('reservas_fraldas')
+                .select(`
+                    *,
+                    fraldas (tamanho)
+                `)
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            const tbody = document.querySelector('#diaperReservationsList tbody');
+            tbody.innerHTML = data.map(row => `
+                <tr>
+                    <td>${row.nome}</td>
+                    <td>Tamanho ${row.fraldas.tamanho}</td>
+                    <td>${row.quantidade}</td>
+                    <td>${new Date(row.created_at).toLocaleString()}</td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error('Erro ao carregar reservas de fraldas:', error);
         }
     }
 });

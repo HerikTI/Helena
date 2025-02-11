@@ -122,46 +122,53 @@ body::before {
 .countdown-timer {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    margin: 30px 0;
-    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: nowrap;
 }
 
-.timer-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(255, 0, 128, 0.2);
+.countdown-item {
+    background: rgba(255, 20, 147, 0.3);
     padding: 15px;
     border-radius: 10px;
-    min-width: 80px;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    flex: 1;
+    min-width: 70px;
+    max-width: 90px;
 }
 
-.timer-item span:first-child {
-    font-size: 2em;
+.countdown-number {
+    font-size: 2rem;
+    color: var(--neon-pink);
     font-weight: bold;
-    color: #ff1493;
-    text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+    margin: 0;
+    line-height: 1;
 }
 
-.timer-item span:last-child {
-    font-size: 0.9em;
-    color: #fff;
-    margin-top: 5px;
+.countdown-label {
+    font-size: 0.8rem;
+    color: white;
+    text-transform: uppercase;
+    margin: 5px 0 0;
 }
 
-@media (max-width: 768px) {
-    .timer-item {
-        min-width: 60px;
+@media (max-width: 480px) {
+    .countdown-timer {
+        gap: 5px;
+    }
+
+    .countdown-item {
         padding: 10px;
+        min-width: 60px;
     }
 
-    .timer-item span:first-child {
-        font-size: 1.5em;
+    .countdown-number {
+        font-size: 1.5rem;
     }
 
-    .timer-item span:last-child {
-        font-size: 0.8em;
+    .countdown-label {
+        font-size: 0.7rem;
     }
 }
 
@@ -449,6 +456,14 @@ body::before {
 .info-text {
     color: white;
     font-size: 1.1rem;
+    font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    margin: 0;
+}
+
+.info-text-local {
+    color: white;
+    font-size: 0.7rem;
     font-weight: 500;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
     margin: 0;
@@ -808,42 +823,52 @@ body::before {
 }
 
 .gift-section {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    width: 100%;
+    margin: 20px 0;
 }
 
-/* Ajustes para mobile */
-@media (max-width: 768px) {
-    .step {
-        padding: 20px;
-        margin: 10px;
-        border-radius: 15px;
-    }
-
-    .main-title {
-        font-size: 2rem;
-    }
-
-    .glass-card {
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .guesses-container,
-    .messages-container {
-        margin: 15px 0;
-    }
-
-    .message-card {
-        margin: 8px 0;
-    }
+.gift-items {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
 }
 
-/* Animação do ursinho */
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+.gift-item {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    max-width: 400px;
+    width: 100%;
+}
+
+.gift-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--glass-shadow);
+}
+
+.gift-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.gift-note {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    margin: 15px 0;
+    font-style: italic;
+}
+
+/* Botão de confirmação */
+.button {
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto 0;
+    display: block;
 }
 
 .button-group {
@@ -911,4 +936,162 @@ body::before {
         width: 100%;
         padding: 15px;
     }
+}
+
+/* Seção de Presentes */
+.gift-items {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.gift-item {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    max-width: 400px;
+    width: 100%;
+}
+
+.gift-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--glass-shadow);
+}
+
+.gift-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.gift-note {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    margin: 15px 0;
+    font-style: italic;
+}
+
+/* Estilos para seleção de fraldas */
+.diapers-selection {
+    margin-top: 15px;
+}
+
+.diapers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.diaper-option {
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 5px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.diaper-option:hover:not(.disabled) {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.diaper-option.selected {
+    background: rgba(255, 192, 203, 0.4);
+    border-color: rgba(255, 192, 203, 0.8);
+    transform: translateY(-2px);
+}
+
+.diaper-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(128, 128, 128, 0.2);
+}
+
+.diaper-option p {
+    margin: 0;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.diaper-quantity {
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 5px;
+}
+
+/* Ajustes para mobile */
+@media (max-width: 768px) {
+    .step {
+        padding: 20px;
+        margin: 10px;
+        border-radius: 15px;
+    }
+
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .glass-card {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .guesses-container,
+    .messages-container {
+        margin: 15px 0;
+    }
+
+    .message-card {
+        margin: 8px 0;
+    }
+}
+
+/* Animação do ursinho */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.gift-suggestions {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.gift-suggestions h4 {
+    color: var(--neon-pink);
+    margin: 0 0 10px;
+    font-size: 1rem;
+}
+
+.suggestions-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.suggestions-list li {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: white;
+    backdrop-filter: blur(5px);
+}
+
+.suggestions-list li:hover {
+    background: rgba(255, 192, 203, 0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
 }

@@ -29,25 +29,26 @@
          
         <section id="step1" class="step active glass-card animate__animated animate__fadeIn">
             <h1 class="main-title">Chá de Bebê da Helena</h1>
-            <p class="subtitle">✨ Venha celebrar conosco este momento mágico! ✨</p>
+            <p class="subtitle">✨ Venha celebrar conosco este momento especial! ✨</p>
+            <p class="subtitle">Somente para as meninas</p>
 
             <!-- Timer -->
             <div class="countdown-timer">
-                <div class="timer-item">
-                    <span id="days">43</span>
-                    <span>DIAS</span>
+                <div class="countdown-item">
+                    <p class="countdown-number" id="days">25</p>
+                    <p class="countdown-label">Dias</p>
                 </div>
-                <div class="timer-item">
-                    <span id="hours">23</span>
-                    <span>HORAS</span>
+                <div class="countdown-item">
+                    <p class="countdown-number" id="hours">16</p>
+                    <p class="countdown-label">Horas</p>
                 </div>
-                <div class="timer-item">
-                    <span id="minutes">12</span>
-                    <span>MINUTOS</span>
+                <div class="countdown-item">
+                    <p class="countdown-number" id="minutes">08</p>
+                    <p class="countdown-label">Minutos</p>
                 </div>
-                <div class="timer-item">
-                    <span id="seconds">26</span>
-                    <span>SEGUNDOS</span>
+                <div class="countdown-item">
+                    <p class="countdown-number" id="seconds">30</p>
+                    <p class="countdown-label">Segundos</p>
                 </div>
             </div>
 
@@ -58,22 +59,24 @@
                         <span class="material-icons">calendar_today</span>
                         <span class="icon-label">Data</span>
                     </div>
-                    <p class="info-text">15 de Março de 2025</p>
+                    <p class="info-text">08 de Março</p>
                 </div>
                 <div class="info-item">
                     <div class="info-icon">
                         <span class="material-icons">schedule</span>
                         <span class="icon-label">Horário</span>
                     </div>
-                    <p class="info-text">15:00</p>
+                    <p class="info-text">15:30</p>
                 </div>
                 <div class="info-item">
                     <div class="info-icon">
                         <span class="material-icons">location_on</span>
                         <span class="icon-label">Local</span>
                     </div>
-                    <p class="info-text">[Endereço do evento]</p>
+                    <p class="info-text">Clube Floresta</p>
                 </div>
+                <br>
+                <p class="info-text">R. Bulcão Viana, 736 - Quiosque da Piscina</p>
             </div>
 
             <h2 class="section-title">Para confirmar sua presença, Encontre a Helena</h2>
@@ -98,10 +101,9 @@
         <section id="step2" class="step glass-card animate__animated animate__fadeIn">
             <h2 class="section-title">Confirmação de Presença</h2>
             <p class="subtitle">Agora que você já encontrou a Helena, confirme sua presença! 🎉</p>
-            
+                
             <form id="rsvpForm" class="form-group">
                 <input type="text" id="name" required placeholder="✨ Seu nome">
-                <input type="tel" id="phone" placeholder="📱 Seu telefone (opcional)">
                 <div class="checkbox-group">
                     <input type="checkbox" id="hasCompanion" class="styled-checkbox">
                     <label for="hasCompanion">Levar acompanhante(s)</label>
@@ -115,25 +117,39 @@
                     </select>
                     <textarea id="companionNames" placeholder="✨ Nome dos acompanhantes (um por linha)" rows="3"></textarea>
                 </div>
-                <button type="submit" class="button">Confirmar Presença</button>
-            </form>
 
-            <!-- Seção de Presentes - apenas na segunda tela -->
-            <div class="gift-section">
-                <h2 class="section-title">Presentinhos</h2>
-                <p class="subtitle">Para tornar este momento ainda mais especial! 🎁</p>
-                
-                <div class="gift-items">
-                    <div class="gift-item">
-                        <span class="gift-icon">👶</span>
-                        <p>Uma fralda tamanho M</p>
+                <!-- Seção de Presentes -->
+                <div class="gift-section">
+                    <h2 class="section-title">Presentinhos</h2>
+                    <p class="subtitle">Para tornar este momento ainda mais especial! 🎁</p>
+                    
+                    <div class="gift-items">
+                        <div class="gift-item">
+                            <span class="gift-icon">👶</span>
+                            <p>Escolha uma fralda:</p>
+                            <div class="diapers-selection">
+                                <div id="diapersList" class="diapers-list">
+                                    <!-- Fraldas serão carregadas dinamicamente aqui -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="gift-item">
-                        <span class="gift-icon">🎁</span>
-                        <p>Um mimo</p>
+                    <div class="gift-suggestions">
+                        <h4>Sugestões de Mimos 🎁</h4>
+                        <ul class="suggestions-list">
+                            <li>🧴 Shampoo/Sabonete Neutro</li>
+                            <li>🧴 Lenços Umedecidos</li>
+                            <li>💊 Pomada para Assaduras</li>
+                            <li>🧺 Kit Higiene</li>
+                            <li>🧴 Óleo para Massagem</li>
+                            <li>🧴 Loção Hidratante</li>
+                            <li>🧺 Kit Manicure Bebê</li>
+                            <li>🧴 Fraldinhas de boca</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
+                <button type="submit" class="button">Confirmar Presença</button>
+            </form>
         </section>
 
         <!-- Etapa 3: Palpites -->
