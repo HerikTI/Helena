@@ -49,37 +49,62 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('totalPessoas').textContent = totalPessoas;
 
             // Carregar estatísticas das fraldas
-            const { data: fraldas, error: fraldasError } = await supabase
+            await loadDiaperStats();
+        } catch (error) {
+            console.error('Erro ao carregar estatísticas:', error);
+        }
+    }
+
+    async function loadDiaperStats() {
+        try {
+            // Buscar dados das fraldas
+            const { data: diapers, error: diapersError } = await supabase
                 .from('fraldas')
                 .select('*')
                 .order('tamanho');
 
-            if (fraldasError) throw fraldasError;
+            if (diapersError) throw diapersError;
 
-            const diaperStats = document.getElementById('diaperStats');
-            if (diaperStats) {
-                diaperStats.innerHTML = `
-                    <h3>Fraldas Disponíveis</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tamanho</th>
-                                <th>Quantidade Restante</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${fraldas.map(fralda => `
-                                <tr>
-                                    <td>Tamanho ${fralda.tamanho}</td>
-                                    <td>${fralda.quantidade} unidades</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
+            // Buscar dados das reservas
+            const { data: reservations, error: reservationsError } = await supabase
+                .from('reservas_fraldas')
+                .select(`
+                    quantidade,
+                    fralda_id,
+                    fraldas (
+                        id,
+                        tamanho
+                    )
+                `);
+
+            if (reservationsError) throw reservationsError;
+
+            // Calcular total reservado por tamanho
+            const reservedTotals = {};
+            reservations.forEach(reservation => {
+                const diaperSize = reservation.fraldas.tamanho;
+                reservedTotals[diaperSize] = (reservedTotals[diaperSize] || 0) + reservation.quantidade;
+            });
+
+            // Criar tabela com os dados
+            const tableBody = document.querySelector('#diapersTable tbody');
+            tableBody.innerHTML = '';
+
+            diapers.forEach(diaper => {
+                const row = document.createElement('tr');
+                const reservedAmount = reservedTotals[diaper.tamanho] || 0;
+                
+                row.innerHTML = `
+                    <td>Fralda ${diaper.tamanho}</td>
+                    <td>${diaper.quantidade}</td>
+                    <td>${reservedAmount}</td>
                 `;
-            }
+                
+                tableBody.appendChild(row);
+            });
+
         } catch (error) {
-            console.error('Erro ao carregar estatísticas:', error);
+            console.error('Erro ao carregar estatísticas de fraldas:', error);
         }
     }
 
