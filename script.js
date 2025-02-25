@@ -415,6 +415,14 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(giftSection);
     }
 
+    function enviarWhatsApp() {
+        let telefone = "5549999165914"; // Altere para o número desejado
+        let mensagem = "Olá, confirmação realizada com sucesso!";
+        let link = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+        window.open(link, '_blank');
+    }
+
+
     // Controle de música
     const bgMusic = document.getElementById('bgMusic');
     const musicToggle = document.getElementById('musicToggle');
